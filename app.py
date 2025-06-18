@@ -3,7 +3,6 @@ import streamlit as st
 import numpy as np
 from PIL import Image
 
-# Titre et instructions de l'application
 st.title("Application de détection de visages")
 st.write(
     """
@@ -18,7 +17,6 @@ st.write(
     """
 )
 
-# Chargement de l'image
 uploaded_file = st.file_uploader("Chargez une image", type=["jpg", "png", "jpeg"])
 if uploaded_file is not None:
     image = np.array(Image.open(uploaded_file))
@@ -36,9 +34,7 @@ if uploaded_file is not None:
         "Choisissez la couleur du rectangle", "#FF0000"
     )
 
-    # Bouton de détection des visages
     if st.button("Détecter les visages"):
-        # Conversion en niveaux de gris
         gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         face_cascade = cv2.CascadeClassifier(
             cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
@@ -47,7 +43,6 @@ if uploaded_file is not None:
             gray_image, scaleFactor=scaleFactor, minNeighbors=minNeighbors
         )
 
-        # Dessin des rectangles autour des visages détectés
         for x, y, w, h in faces:
             cv2.rectangle(
                 image,
@@ -62,7 +57,6 @@ if uploaded_file is not None:
         st.image(image, caption="Visages détectés", use_column_width=True)
         st.write(f"Nombre de visages détectés : {len(faces)}")
 
-        # Bouton pour sauvegarder l'image
         if st.button("Sauvegarder l'image"):
             output_path = "detected_faces.jpg"
             cv2.imwrite(output_path, cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
